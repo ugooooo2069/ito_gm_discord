@@ -83,7 +83,7 @@ async def on_ready():
 # ----------
 
 
-@tree.command(name="neko", description="Neko")
+@tree.command(name="neko", description="鳴きます")
 @app_commands.guild_only()
 async def neko(interaction: Interaction):
     logger.debug("Neko command")
@@ -94,7 +94,7 @@ async def neko(interaction: Interaction):
     print("--------")
 
 
-@tree.command(name="quit", description="Quit bot (admin only)")
+@tree.command(name="quit", description="botを停止します (admin only)")
 async def quit(interaction: Interaction):
     """
     quitコマンド
@@ -134,7 +134,7 @@ async def quit(interaction: Interaction):
         return
 
 
-@tree.command(name="set_channel", description="Set channel for ito game")
+@tree.command(name="set_channel", description="あそぶチャンネルを設定します")
 @app_commands.guild_only()
 async def set_channel(interaction: Interaction):
     """
@@ -183,7 +183,7 @@ async def set_channel(interaction: Interaction):
     print("--------")
 
 
-@tree.command(name="entry", description="Entry to game")
+@tree.command(name="entry", description="ゲームに参加します")
 @app_commands.guild_only()
 async def entry(interaction: Interaction):
     """
@@ -269,7 +269,7 @@ async def entry(interaction: Interaction):
     print("--------")
 
 
-@tree.command(name="exit", description="Exit from game")
+@tree.command(name="exit", description="ゲームから退出します")
 @app_commands.guild_only()
 async def exit(interaction: Interaction):
     """
@@ -336,7 +336,7 @@ async def exit(interaction: Interaction):
 
     print("--------")
 
-@tree.command(name="theme", description="Set talk theme")
+@tree.command(name="theme", description="トークテーマを設定します")
 @app_commands.guild_only()
 async def theme(interaction: discord.Interaction, theme: str):
     """
@@ -409,7 +409,7 @@ async def theme(interaction: discord.Interaction, theme: str):
     print("--------")
 
 
-@tree.command(name="start", description="Start game")
+@tree.command(name="start", description="ゲームを開始します")
 @app_commands.guild_only()
 async def start(interaction: discord.Interaction):
     """
@@ -579,7 +579,7 @@ async def start(interaction: discord.Interaction):
     print("--------")
 
 
-@tree.command(name="put", description="Put card to table")
+@tree.command(name="put", description="手札の中で最小のカードを場に出します")
 @app_commands.guild_only()
 async def put(interaction: discord.Interaction):
     """
