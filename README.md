@@ -2,17 +2,17 @@
 
 ito game master for discord on python
 
-## 概要
+## About
 
 itoのゲームマスターをしてくれるdiscord botです  
 友人と遊ぶために作成したのでバグが起きるかもしれません
 
-## 開発環境
+## Requirement
 
 - Python 3.10.5
 - discord.py 2.3.2
 
-## コマンド  
+## Command
 
 |コマンド|動作|
 |---|---|
