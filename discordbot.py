@@ -170,7 +170,9 @@ async def set_channel(interaction: Interaction):
     embed.add_field(name="トークテーマ", value=ito.get_theme(), inline=False)
     players_list = ito.get_player_name_list()
     if len(players_list) == 0:
-        embed.add_field(name="Players", value="プレイヤーが参加していません", inline=False)
+        embed.add_field(
+            name="Players", value="プレイヤーが参加していません", inline=False
+        )
     else:
         players = "\n".join(players_list)
         embed.add_field(name="Players", value=players, inline=False)
@@ -336,6 +338,78 @@ async def exit(interaction: Interaction):
 
     print("--------")
 
+
+@tree.command(name="life", description="ライフを設定します")
+@app_commands.guild_only()
+async def life(interaction: discord.Interaction, life: int):
+    """
+    lifeコマンド
+
+    ライフを設定する
+    """
+
+    logger.debug("Life command")
+
+    now= datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+
+    # チャンネルIDが登録されていない場合は登録
+    if ito.get_channel() == None:
+        ito.set_channel(interaction.channel)
+        logger.debug("Channel ID set: " + str(ito.get_channel_name()))
+
+    # 登録されているチャンネルと異なる場合はエラーメッセージを送信
+    if interaction.channel_id != ito.get_channel_id():
+        embed = Embed(
+            title="Entry command",
+            description="以下のチャンネルが選択されています",
+            color=Colour.dark_blue(),
+        )
+        embed.add_field(name="Channel", value=ito.get_channel_name(), inline=False)
+        embed.set_footer(text=now)
+        await interaction.response.send_message(embed=embed)
+        print("--------")
+        return
+    
+    # コマンド実行者が参加していない場合はエラーメッセージを送信
+    if interaction.user.id not in ito.get_player_id_list():
+        embed = Embed(
+            title="Life command",
+            description="最初にゲームに参加してね！",
+            color=Colour.dark_blue(),
+        )
+        embed.add_field(name="チャンネル", value=ito.get_channel_name(), inline=False)
+        embed.add_field(name="トークテーマ", value=ito.get_theme(), inline=False)
+        player_list = ito.get_player_name_list()
+        if len(player_list) == 0:
+            players = "プレイヤーがまだ参加していません"
+        else:
+            players = "\n".join(player_list)
+        embed.add_field(name="Player", value=players, inline=False)
+        embed.set_footer(text=now)
+        await interaction.response.send_message(embed=embed)
+        print("--------")
+        return
+    
+    ito.set_life(life)
+    embed = Embed(
+        title="Life command",
+        description="ライフを" + str(life) + "に設定しました",
+        color=Colour.dark_blue(),
+    )
+    embed.add_field(name="チャンネル", value=ito.get_channel_name(), inline=False)
+    embed.add_field(name="トークテーマ", value=ito.get_theme(), inline=False)
+    player_list = ito.get_player_name_list()
+    players = "\n".join(player_list)
+    embed.add_field(name="Player", value=players, inline=False)
+    embed.set_footer(text=now)
+    await interaction.response.send_message(embed=embed)
+    print("--------")
+
+    logger.debug("Set life: " + str(ito.get_life()))
+
+    print("--------")
+
+
 @tree.command(name="theme", description="トークテーマを設定します")
 @app_commands.guild_only()
 async def theme(interaction: discord.Interaction, theme: str):
@@ -404,7 +478,7 @@ async def theme(interaction: discord.Interaction, theme: str):
     await interaction.response.send_message(embed=embed)
 
     # debug
-    logger.debug("Theme set: " + theme)
+    logger.debug("Theme set: " + ito.get_theme())
 
     print("--------")
 
@@ -527,14 +601,13 @@ async def start(interaction: discord.Interaction):
     # ゲーム進行フラグをTrueにする
     ito.start_game()
 
-    # ライフを設定する
-    ito.set_life(3)
-
     # テキストチャンネル用のEmbedを生成
     embed_channel = discord.Embed(
         title="Game start!!!", description="ゲーム情報", color=discord.Color.dark_blue()
     )
-    embed_channel.add_field(name="チャンネル", value=ito.get_channel_name(), inline=False)
+    embed_channel.add_field(
+        name="チャンネル", value=ito.get_channel_name(), inline=False
+    )
     embed_channel.add_field(name="ライフ", value=str(ito.get_life()), inline=False)
     embed_channel.add_field(name="トークテーマ", value=ito.get_theme(), inline=False)
 
@@ -559,7 +632,9 @@ async def start(interaction: discord.Interaction):
         embed_dm.clear_fields()
 
         # DM用のEmbedに各情報を追加
-        embed_dm.add_field(name="チャンネル", value=ito.get_channel_name(), inline=False)
+        embed_dm.add_field(
+            name="チャンネル", value=ito.get_channel_name(), inline=False
+        )
         embed_dm.add_field(name="ライフ", value=str(ito.get_life()), inline=False)
         embed_dm.add_field(name="トークテーマ", value=ito.get_theme(), inline=False)
 
