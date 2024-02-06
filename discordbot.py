@@ -318,6 +318,18 @@ async def exit(interaction: Interaction):
         print("--------")
         return
 
+    # ゲームが開始されている場合はエラーメッセージを送信
+    if ito.is_ongoing():
+        embed = Embed(
+            title="Exit command",
+            description="ゲームが終了してから退出してね！",
+            color=Colour.dark_blue(),
+        )
+        embed.set_footer(text=now)
+        await interaction.response.send_message(embed=embed)
+        print("--------")
+        return
+
     # プレイヤーを退出
     ito.delete_player(author)
 
@@ -350,7 +362,7 @@ async def life(interaction: discord.Interaction, life: int):
 
     logger.debug("Life command")
 
-    now= datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+    now = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
 
     # チャンネルIDが登録されていない場合は登録
     if ito.get_channel() == None:
@@ -369,7 +381,7 @@ async def life(interaction: discord.Interaction, life: int):
         await interaction.response.send_message(embed=embed)
         print("--------")
         return
-    
+
     # コマンド実行者が参加していない場合はエラーメッセージを送信
     if interaction.user.id not in ito.get_player_id_list():
         embed = Embed(
@@ -389,7 +401,29 @@ async def life(interaction: discord.Interaction, life: int):
         await interaction.response.send_message(embed=embed)
         print("--------")
         return
-    
+
+    # ゲームが開始されている場合はエラーメッセージを送信
+    if ito.is_ongoing():
+        embed = Embed(
+            title="Life command",
+            description="ゲーム中です",
+            color=Colour.dark_blue(),
+        )
+        embed.set_footer(text=now)
+        await interaction.response.send_message(embed=embed)
+        return
+
+    # 数字が1~3以外の場合はエラーメッセージを送信
+    if life < 1 or 3 < life:
+        embed = Embed(
+            title="Life command",
+            description="ライフは1~3の間で指定してね！",
+            color=Colour.dark_blue(),
+        )
+        embed.set_footer(text=now)
+        await interaction.response.send_message(embed=embed)
+        return
+
     ito.set_life(life)
     embed = Embed(
         title="Life command",
