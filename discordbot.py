@@ -688,7 +688,88 @@ async def start(interaction: discord.Interaction):
     print("--------")
 
 
-@tree.command(name="put", description="手札の中で最小のカードを場に出します")
+@tree.command(name="stop", description="ゲームを停止します (only in ongoing game)")
+@app_commands.guild_only()
+async def stop(interaction: discord.Interaction):
+    """
+    stopコマンド
+    """
+
+    logger.debug("Stop command")
+
+    now = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+
+    if ito.get_channel() == None:
+        embed = Embed(
+            title="Stop command",
+            description="ゲームが開始していません",
+            color=Colour.dark_blue(),
+        )
+        embed.set_footer(text=now)
+        await interaction.response.send_message(embed=embed)
+        print("--------")
+        return
+
+    # ゲームが開始していない場合はエラーメッセージを送信
+    if not ito.is_ongoing():
+        embed = Embed(
+            title="Stop command",
+            description="ゲームが開始していません",
+            color=Colour.dark_blue(),
+        )
+        embed.set_footer(text=now)
+        await interaction.response.send_message(embed=embed)
+        print("--------")
+        return
+
+    # 登録されているチャンネル以外の場合はエラーメッセージを送信
+    if interaction.channel_id != ito.get_channel().id:
+        embed = Embed(
+            title="Stop command",
+            description="以下のチャンネルが選択されています",
+            color=Colour.dark_blue(),
+        )
+        embed.add_field(name="チャンネル", value=ito.get_channel_name(), inline=False)
+        embed.set_footer(text=now)
+        await interaction.response.send_message(embed=embed)
+        print("--------")
+        return
+
+    # コマンド送信者がゲームに参加していない場合はエラーメッセージを送信
+    if interaction.user.id not in ito.get_player_id_list():
+        embed = Embed(
+            title="Stop command",
+            description="ゲームに参加していません！",
+            color=Colour.dark_blue(),
+        )
+        player_list = ito.get_player_name_list()
+        players = "\n".join(player_list)
+        embed.add_field(name="参加者", value=players, inline=False)
+        embed.set_footer(text=now)
+        await interaction.response.send_message(embed=embed)
+        print("--------")
+        return
+
+    await interaction.response.defer()
+
+    ito.initialize_game()
+
+    embed = Embed(
+        title="Stop command",
+        description="ゲームを停止しました",
+        color=Colour.dark_blue(),
+    )
+    embed.set_footer(text=now)
+    await interaction.followup.send(embed=embed)
+
+    logger.debug("Game stopped")
+    print("--------")
+
+
+@tree.command(
+    name="put",
+    description="手札の中で最小のカードを場に出します (only in ongoing game)",
+)
 @app_commands.guild_only()
 async def put(interaction: discord.Interaction):
     """
