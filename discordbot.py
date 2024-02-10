@@ -900,9 +900,9 @@ async def put(interaction: discord.Interaction):
 
     logger.debug("Life: " + str(ito.get_life()))
     logger.debug("Deck: " + str(ito.get_deck()))
-    logger.debug("Count penalty: " + str(count_penalty))
     logger.debug("Game over: " + str(ito.is_gameover()))
     logger.debug("Game clear: " + str(ito.is_cleared()))
+    logger.debug("Count penalty: " + str(count_penalty))
 
     # 結果をチャンネルに送信
     # ゲームオーバーの場合
@@ -962,7 +962,7 @@ async def put(interaction: discord.Interaction):
         return
 
     # 失敗した場合
-    if 0 < count_penalty and count_penalty < ito.get_life():
+    if not ito.is_gameover() and 0 < count_penalty:
         logger.debug("Failure")
 
         embed = Embed(
