@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from logging import getLogger, StreamHandler, DEBUG
 from datetime import datetime
 import discord
-from discord import Intents, Client, app_commands, Embed, Colour, Interaction, Guild
+from discord import Intents, Client, app_commands, Embed, Colour, Interaction
 from player import Player
 from ito import Ito
 
