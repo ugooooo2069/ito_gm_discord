@@ -912,7 +912,7 @@ async def put(interaction: discord.Interaction):
         embed = Embed(
             title="Game over",
             description="小さいカードを場に出しました\nライフが0になりました\nゲームを終了します",
-            color=Colour.dark_blue(),
+            color=Colour.magenta(),
         )
         embed.add_field(name="ライフ", value="0", inline=False)
         embed.set_footer(text=now)
@@ -940,7 +940,7 @@ async def put(interaction: discord.Interaction):
         embed = Embed(
             title="Game clear",
             description="ゲームをクリアしました！\nゲームを終了します",
-            color=Colour.dark_blue(),
+            color=Colour.green(),
         )
         embed.add_field(name="ライフ", value=str(ito.get_life()), inline=False)
         embed.set_footer(text=now)
@@ -968,7 +968,7 @@ async def put(interaction: discord.Interaction):
         embed = Embed(
             title="Failure",
             description="失敗しました...\n小さいカードを場に出しました\n場に出された枚数分のライフを減らします",
-            color=Colour.dark_blue(),
+            color=Colour.gold(),
         )
         embed.add_field(name="ライフ", value=str(ito.get_life()), inline=False)
         embed.add_field(name="トークテーマ", value=ito.get_theme(), inline=False)
@@ -994,7 +994,7 @@ async def put(interaction: discord.Interaction):
         embed = Embed(
             title="Success",
             description="成功しました！\n次に小さいカードを場に出してください",
-            color=Colour.dark_blue(),
+            color=Colour.green(),
         )
         embed.add_field(name="ライフ", value=str(ito.get_life()), inline=False)
         embed.add_field(name="トークテーマ", value=ito.get_theme(), inline=False)
