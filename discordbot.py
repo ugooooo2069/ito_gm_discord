@@ -8,8 +8,6 @@ from dotenv import load_dotenv
 from logging import getLogger, StreamHandler, DEBUG
 from discord import Intents, Object, Embed, Colour, errors
 from discord.ext import commands
-from player import Player
-from ito import Ito
 
 
 # ----------
@@ -37,18 +35,16 @@ TOKEN = environ["TOKEN"]
 # 管理者のDiscord ID
 ADMIN_ID = int(environ["ADMIN_ID"])
 
-# "marmot room"のギルドID
+# すぐにコマンドを反映させたいサーバーのID
 GUILD_ID = int(environ["GUILD_ID"])
 
 # "ito-bot-test"のチャンネルID
 CHANNEL_ID = int(environ["CHANNEL_ID"])
 
+
 # ----------
 # インスタンス生成
 # ----------
-
-# ゲーム
-ito = Ito()
 
 # discord.py関連
 intents = Intents.default()
@@ -62,6 +58,7 @@ bot.owner_ids = [ADMIN_ID]
 # ----------
 
 
+# Cogの読込み
 @bot.event
 async def setup_hook():
     try:
@@ -71,6 +68,7 @@ async def setup_hook():
         logger.debug("Failed to load extension")
 
 
+# コマンドを同期
 @bot.event
 async def on_ready():
     GUILD = Object(GUILD_ID)
@@ -136,6 +134,7 @@ def only_for_admin(func):
 # --------
 
 
+# テスト用
 @bot.hybrid_command(name="neko", description="鳴きます")
 @commands.guild_only()
 @log_wrapper
@@ -152,14 +151,13 @@ async def neko(ctx: commands.Context):
 @commands.guild_only()
 @log_wrapper
 async def inu(ctx: commands.Context):
-    embed = Embed(
-        title=f"Inu command", description="わん", color=Colour.dark_blue()
-    )
+    embed = Embed(title=f"Inu command", description="わん", color=Colour.dark_blue())
     now = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
     embed.set_footer(text=now)
     await ctx.send(embed=embed)
 
 
+# Cogのリロード
 @bot.hybrid_command(name="reload", description="コマンドをリロードします (admin only)")
 @log_wrapper
 @only_for_admin
@@ -183,6 +181,7 @@ async def reload(ctx: commands.Context):
     logger.debug(description)
 
 
+# botを停止
 @bot.hybrid_command(name="quit", description="botを停止します (admin only)")
 @log_wrapper
 @only_for_admin
@@ -202,6 +201,7 @@ async def quit(ctx: commands.Context):
 # ----------
 # 本文
 # ----------
+
 
 # Botの起動とDiscordサーバーへの接続
 bot.run(TOKEN)
