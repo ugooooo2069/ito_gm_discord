@@ -7,7 +7,7 @@
 # 進行中のゲーム情報を格納するクラス
 
 import discord
-from discord import Guild, TextChannel
+from discord import Guild, TextChannel, VoiceChannel
 import random
 from player import Player
 
@@ -41,6 +41,7 @@ class Ito:
         """
         self.__guild: Guild = None
         self.__channel: TextChannel = None
+        self.__voice_channel: VoiceChannel = None
         self.__players: dict[int:Player] = dict()
         self.__life: int = 3
         self.__deck: dict[int, bool] = dict()
@@ -64,14 +65,25 @@ class Ito:
 
     def set_channel(self, channel: TextChannel):
         """
-        チャンネルIDを設定する
+        チャンネルを設定する
 
         Parameters
         ----------
-        channel_id: int
-            チャンネルID
+        channel: TextChannel
+            チャンネル
         """
         self.__channel = channel
+
+    def set_voice_channel(self, voice_channel: VoiceChannel):
+        """
+        ボイスチャンネルを設定する
+
+        Parameters
+        ----------
+        voice_channel: VoiceChannel
+            ボイスチャンネル
+        """
+        self.__voice_channel = voice_channel
 
     def set_life(self, life: int):
         """
@@ -158,6 +170,36 @@ class Ito:
         channel_name: str
         """
         return self.__channel.name
+
+    def get_voice_channel(self) -> VoiceChannel | None:
+        """
+        ボイスチャンネルを取得する
+
+        Returns
+        -------
+        voice_channel: VoiceChannel
+        """
+        return self.__voice_channel
+
+    def get_voice_channel_id(self) -> int:
+        """
+        ボイスチャンネルIDを取得する
+
+        Returns
+        -------
+        voice_channel_id: int
+        """
+        return self.__voice_channel.id
+
+    def get_voice_channel_name(self) -> str:
+        """
+        ボイスチャンネル名を取得する
+
+        Returns
+        -------
+        voice_channel_name: str
+        """
+        return self.__voice_channel.name
 
     def get_players(self) -> dict[int:Player]:
         """
@@ -261,7 +303,7 @@ class Ito:
             del self.__players[player.id]
         except KeyError:
             raise KeyError("Player not found: " + player.name)
-        
+
     def start_game(self):
         """
         ゲームを開始する
@@ -385,7 +427,7 @@ class Ito:
             False: ゲームがクリアしていない
         """
         # deckの中でFalseになっているカードの数を数える
-        deck: dict[int: bool] = self.__deck
+        deck: dict[int:bool] = self.__deck
         deck_put = list(deck.values())
         false_count = deck_put.count(False)
 
