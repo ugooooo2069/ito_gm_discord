@@ -12,7 +12,7 @@ itoのゲームマスターをしてくれるdiscord botです
 - Python 3.10.5
 - discord.py 2.3.2
 
-## Command
+## Commands
 
 |コマンド|動作|
 |---|---|
