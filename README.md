@@ -32,7 +32,7 @@ itoのゲームマスターをしてくれるdiscord botです
 このbotはArcLight Games社から発売されているボードゲーム「ito」をオンラインで遊べるように、
 ルールと機能を表現したものです  
 
-([ito - ArclightGames Official](https://arclightgames.jp/product/ito/))  
+( [ito - ArclightGames Official](https://arclightgames.jp/product/ito/) )  
 
 
 権利的にまずいことがあったら即対応いたしますのでご連絡ください  
