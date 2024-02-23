@@ -19,6 +19,7 @@ itoのゲームマスターをしてくれるdiscord botです
 |`/setting channel`|あそぶチャンネルを設定します|
 |`/setting life ライフ`|ライフを設定します（デフォルト：3）|
 |`/setting theme トークテーマ`|トークテーマを設定します|
+|`/setting level レベル`|レベルを設定します|
 |`/entry`|ゲームに参加します|
 |`/exit`|ゲームから退出します|
 |`/start`|ゲームを開始します|
@@ -33,7 +34,6 @@ itoのゲームマスターをしてくれるdiscord botです
 ルールと機能を表現したものです  
 
 ( [ito - ArclightGames Official](https://arclightgames.jp/product/ito/) )  
-
 
 権利的にまずいことがあったら即対応いたしますのでご連絡ください  
 
