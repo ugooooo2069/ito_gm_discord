@@ -6,10 +6,24 @@
 
 # 進行中のゲーム情報を格納するクラス
 
+from logging import getLogger, StreamHandler, DEBUG
 import discord
 from discord import Guild, TextChannel, VoiceChannel
 import random
 from player import Player
+
+
+# ----------
+# ロガー
+# ----------
+
+
+logger = getLogger(__name__)
+handler = StreamHandler()
+handler.setLevel(DEBUG)
+logger.setLevel(DEBUG)
+logger.addHandler(handler)
+logger.propagate = False
 
 
 class Ito:
@@ -18,21 +32,27 @@ class Ito:
 
     Attributes
     -------------------
-    __guild_id : discord.Guild.id
-        サーバーID
-    __channel_id : discord.Message.channel.id
+    __guild : discord.Guild
+        サーバー
+    __channel : discord.TextChannel
         ゲームが開始されたチャンネル
+    __voice_channel : discord.VoiceChannel
+        通話しているボイスチャンネル
     __players : dict
         プレイヤーのdict
         キー : discord.Member.id
         値 : Player
     __life : int = 3
         ライフ
+    __level : int = 1
+        レベル (各プレイヤーに配るカードの枚数)
     __deck : dict
         キー : カード番号
         場札フラグ : bool (True : 場に出されている)
     __theme : str
         トークテーマ
+    __ongoing : bool
+        ゲーム中フラグ (True : ゲーム中)
     """
 
     def __init__(self):
@@ -44,6 +64,7 @@ class Ito:
         self.__voice_channel: VoiceChannel = None
         self.__players: dict[int:Player] = dict()
         self.__life: int = 3
+        self.__level: int = 1
         self.__deck: dict[int, bool] = dict()
         self.__theme: str = "トークテーマを設定してください"
         self.__ongoing: bool = False
@@ -96,6 +117,17 @@ class Ito:
         """
         self.__life = life
 
+    def set_level(self, level: int):
+        """
+        レベルを設定する
+
+        Parameters
+        ----------
+        level: int
+            レベル
+        """
+        self.__level = level
+
     def set_theme(self, theme: str):
         """
         トークテーマを設定する
@@ -106,6 +138,18 @@ class Ito:
             トークテーマ
         """
         self.__theme = theme
+
+    def start_game(self):
+        """
+        ゲームを開始する
+        """
+        self.__ongoing = True
+
+    def end_game(self):
+        """
+        ゲームを終了する
+        """
+        self.__ongoing = False
 
     # ----------
     # getter
@@ -252,6 +296,16 @@ class Ito:
         """
         return self.__life
 
+    def get_level(self) -> int:
+        """
+        レベルを取得する
+
+        Returns
+        -------
+        level: int
+        """
+        return self.__level
+
     def get_theme(self) -> str:
         """
         トークテーマを取得する
@@ -271,6 +325,18 @@ class Ito:
         deck: dict
         """
         return self.__deck
+
+    def is_ongoing(self) -> bool:
+        """
+        ゲーム中か判定する
+
+        Returns
+        -------
+        boolean
+            True: ゲーム中
+            False: ゲーム中ではない
+        """
+        return self.__ongoing
 
     # ----------
     # ito関連
@@ -304,30 +370,6 @@ class Ito:
         except KeyError:
             raise KeyError("Player not found: " + player.name)
 
-    def start_game(self):
-        """
-        ゲームを開始する
-        """
-        self.__ongoing = True
-
-    def end_game(self):
-        """
-        ゲームを終了する
-        """
-        self.__ongoing = False
-
-    def is_ongoing(self) -> bool:
-        """
-        ゲーム中か判定する
-
-        Returns
-        -------
-        boolean
-            True: ゲーム中
-            False: ゲーム中ではない
-        """
-        return self.__ongoing
-
     # カードを生成してプレイヤーに配る
     def deal_cards(self):
         """
@@ -336,21 +378,30 @@ class Ito:
         """
 
         # 仮のセットを生成する
-        temporary_set = set()
+        temporary_deck = set()
 
         # プレイヤー数分の乱数を追加する
-        while len(temporary_set) <= len(self.__players):
-            temporary_set.add(random.randint(1, 100))
+        number_of_cards: int = len(self.__players) * self.__level
+        while len(temporary_deck) <= number_of_cards:
+            temporary_deck.add(random.randint(1, 100))
+        temporary_list = list(temporary_deck)
 
         # deckをプレイヤーに配る
-        temporary_list = list(temporary_set)
         players: list[Player] = list(self.__players.values())
-        for player in players:
-            number = temporary_list.pop()
-            player.receive_card(number)
+        # レベル数分繰り返す
+        for turn in range(self.__level):
+            # 各プレイヤーにカードを配る
+            for player in players:
+                number = temporary_list.pop()
+                player.receive_card(number)
 
-            # deckに追加
-            self.__deck[number] = False
+                # deckに追加
+                self.__deck[number] = False
+
+        # ログ出力
+        logger.debug("Cards dealt")
+        for player in players:
+            logger.debug(f"{player.get_name()}: {player.hand_to_string_open()}")
 
     def receive_card(self, card: int):
         """

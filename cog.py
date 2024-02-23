@@ -303,7 +303,12 @@ class MyCog(commands.Cog):
         embed_channel.add_field(
             name="ライフ",
             value=str(ito.get_life()),
-            inline=False,
+            inline=True,
+        )
+        embed_channel.add_field(
+            name="レベル",
+            value=str(ito.get_level()),
+            inline=True,
         )
         embed_channel.add_field(
             name="トークテーマ",
@@ -339,7 +344,12 @@ class MyCog(commands.Cog):
             embed_dm.add_field(
                 name="ライフ",
                 value=str(ito.get_life()),
-                inline=False,
+                inline=True,
+            )
+            embed_dm.add_field(
+                name="レベル",
+                value=str(ito.get_level()),
+                inline=True,
             )
             embed_dm.add_field(
                 name="トークテーマ",
@@ -408,7 +418,8 @@ class MyCog(commands.Cog):
                 description="手札がありません",
                 color=Colour.gold(),
             )
-            embed.add_field(name="ライフ", value=str(ito.get_life()), inline=False)
+            embed.add_field(name="ライフ", value=str(ito.get_life()), inline=True)
+            embed.add_field(name="レベル", value=str(ito.get_level()), inline=True)
             embed.add_field(name="トークテーマ", value=ito.get_theme(), inline=False)
             for player in players:
                 embed.add_field(
@@ -437,7 +448,8 @@ class MyCog(commands.Cog):
                 description="小さいカードを場に出しました\nライフが0になりました\nゲームを終了します",
                 color=Colour.magenta(),
             )
-            embed.add_field(name="ライフ", value="0", inline=False)
+            embed.add_field(name="ライフ", value="0", inline=True)
+            embed.add_field(name="レベル", value=str(ito.get_level()), inline=True)
             for player in players:
                 embed.add_field(
                     name=player.get_name(),
@@ -457,7 +469,8 @@ class MyCog(commands.Cog):
                 description="ゲームをクリアしました！\nゲームを終了します",
                 color=Colour.green(),
             )
-            embed.add_field(name="ライフ", value=str(ito.get_life()), inline=False)
+            embed.add_field(name="ライフ", value=str(ito.get_life()), inline=True)
+            embed.add_field(name="レベル", value=str(ito.get_level()), inline=True)
             for player in players:
                 embed.add_field(
                     name=player.get_name(),
@@ -477,7 +490,8 @@ class MyCog(commands.Cog):
                 description="失敗しました...\n小さいカードを場に出しました\n場に出された枚数分のライフを減らします\n次に小さいカードを場に出してください",
                 color=Colour.gold(),
             )
-            embed.add_field(name="ライフ", value=str(ito.get_life()), inline=False)
+            embed.add_field(name="ライフ", value=str(ito.get_life()), inline=True)
+            embed.add_field(name="レベル", value=str(ito.get_level()), inline=True)
             embed.add_field(name="トークテーマ", value=ito.get_theme(), inline=False)
             for player in players:
                 embed.add_field(
@@ -496,7 +510,8 @@ class MyCog(commands.Cog):
                 description="成功しました！\n次に小さいカードを場に出してください",
                 color=Colour.green(),
             )
-            embed.add_field(name="ライフ", value=str(ito.get_life()), inline=False)
+            embed.add_field(name="ライフ", value=str(ito.get_life()), inline=True)
+            embed.add_field(name="レベル", value=str(ito.get_level()), inline=True)
             embed.add_field(name="トークテーマ", value=ito.get_theme(), inline=False)
             for player in players:
                 embed.add_field(
@@ -586,6 +601,34 @@ class MyCog(commands.Cog):
         embed = Embed(
             title="Set life command",
             description=f"ライフを{life}に設定しました",
+            color=Colour.dark_blue(),
+        )
+        embed.set_footer(text=now)
+        await ctx.send(embed=embed)
+
+    @setting.command(name="level", description="レベルを設定します")
+    @log_wrapper
+    @channel_registerd_check
+    @only_in_channel
+    @only_off_game
+    @only_for_player
+    async def set_level(self, ctx: commands.Context, *, level: int):
+        ito = self.ito
+        now = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+        if level < 1 or 3 < level:
+            embed = Embed(
+                title="Set level command",
+                description="レベルは1~3の間で指定してね！",
+                color=Colour.gold(),
+            )
+            embed.set_footer(text=now)
+            await ctx.send(embed=embed)
+            return
+
+        ito.set_level(level)
+        embed = Embed(
+            title="Set level command",
+            description=f"レベルを{level}に設定しました",
             color=Colour.dark_blue(),
         )
         embed.set_footer(text=now)
