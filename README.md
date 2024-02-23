@@ -7,7 +7,7 @@ ito game master for discord on python
 itoのゲームマスターをしてくれるdiscord botです  
 友人と遊ぶために作成したのでバグが起きるかもしれません
 
-## Requirement
+## Develop emvironment
 
 - Python 3.10.5
 - discord.py 2.3.2
