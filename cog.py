@@ -1,7 +1,6 @@
 # スラッシュコマンド
 
 
-from logging import getLogger, StreamHandler, DEBUG
 from functools import wraps
 from datetime import datetime
 from discord.ext import commands
@@ -14,13 +13,7 @@ from player import Player
 # ロガー
 # ----------
 
-
-logger = getLogger(__name__)
-handler = StreamHandler()
-handler.setLevel(DEBUG)
-logger.setLevel(DEBUG)
-logger.addHandler(handler)
-logger.propagate = False
+from loguru import logger
 
 
 # --------
