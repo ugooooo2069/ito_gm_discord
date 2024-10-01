@@ -34,7 +34,7 @@ class MyCog(commands.Cog):
     def log_wrapper(func):
         @wraps(func)
         async def decorator(*args, **kwargs):
-            now = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+            now = datetime.now().strftime("%Y/%m/%d %H:%M")
             logger.debug(now)
             ctx: commands.Context = args[1]
             logger.debug(f"{func.__name__} command from {ctx.author}")
@@ -58,7 +58,7 @@ class MyCog(commands.Cog):
                     description="ゲームが開始されていません",
                     color=Colour.gold(),
                 )
-                now = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+                now = datetime.now().strftime("%Y/%m/%d %H:%M")
                 embed.set_footer(text=now)
                 ctx: commands.Context = args[1]
                 await ctx.send(embed=embed)
@@ -83,7 +83,7 @@ class MyCog(commands.Cog):
                     description="ゲームが開始されています",
                     color=Colour.gold(),
                 )
-                now = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+                now = datetime.now().strftime("%Y/%m/%d %H:%M")
                 embed.set_footer(text=now)
                 ctx: commands.Context = args[1]
                 await ctx.send(embed=embed)
@@ -115,7 +115,7 @@ class MyCog(commands.Cog):
                 else:
                     players = "\n".join(player_list)
                 embed.add_field(name="参加者", value=players, inline=False)
-                now = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+                now = datetime.now().strftime("%Y/%m/%d %H:%M")
                 embed.set_footer(text=now)
                 await ctx.send(embed=embed)
                 return
@@ -143,7 +143,7 @@ class MyCog(commands.Cog):
                 embed.add_field(
                     name="チャンネル", value=ito.get_channel().name, inline=False
                 )
-                now = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+                now = datetime.now().strftime("%Y/%m/%d %H:%M")
                 embed.set_footer(text=now)
                 await ctx.send(embed=embed)
                 return
@@ -189,7 +189,7 @@ class MyCog(commands.Cog):
 
         ito = self.ito
 
-        now = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+        now = datetime.now().strftime("%Y/%m/%d %H:%M")
 
         if ctx.author.id in ito.get_players():
             embed = Embed(
@@ -240,7 +240,7 @@ class MyCog(commands.Cog):
         )
         players = "\n".join(ito.get_player_name_list())
         embed.add_field(name="参加者", value=players, inline=False)
-        now = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+        now = datetime.now().strftime("%Y/%m/%d %H:%M")
         embed.set_footer(text=now)
         await ctx.send(embed=embed)
 
@@ -271,7 +271,7 @@ class MyCog(commands.Cog):
             else:
                 players = "\n".join(ito.get_player_name_list())
             embed.add_field(name="参加者", value=players, inline=False)
-            now = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+            now = datetime.now().strftime("%Y/%m/%d %H:%M")
             embed.set_footer(text=now)
             await ctx.send(embed=embed)
             return
@@ -315,7 +315,7 @@ class MyCog(commands.Cog):
             color=Colour.dark_blue(),
         )
 
-        now = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+        now = datetime.now().strftime("%Y/%m/%d %H:%M")
         embed_channel.set_footer(text=now)
         embed_dm.set_footer(text=now)
 
@@ -380,7 +380,7 @@ class MyCog(commands.Cog):
             description="ゲームを終了しました",
             color=Colour.dark_blue(),
         )
-        now = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+        now = datetime.now().strftime("%Y/%m/%d %H:%M")
         embed.set_footer(text=now)
         await ctx.send(embed=embed)
 
@@ -403,7 +403,7 @@ class MyCog(commands.Cog):
         current_player = ito.get_player(ctx.author.id)
         card_put = current_player.put_card()
         players: list[Player] = list(ito.get_players().values())
-        now = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+        now = datetime.now().strftime("%Y/%m/%d %H:%M")
 
         if card_put == None:
             embed = Embed(
@@ -531,7 +531,7 @@ class MyCog(commands.Cog):
             description=description,
             color=Colour.dark_blue(),
         )
-        now = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+        now = datetime.now().strftime("%Y/%m/%d %H:%M")
         embed.set_footer(text=now)
         await ctx.send(embed=embed)
 
@@ -550,7 +550,7 @@ class MyCog(commands.Cog):
             color=Colour.dark_blue(),
         )
         embed.add_field(name="トークテーマ", value=ito.get_theme(), inline=False)
-        now = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+        now = datetime.now().strftime("%Y/%m/%d %H:%M")
         embed.set_footer(text=now)
         await ctx.send(embed=embed)
 
@@ -567,7 +567,7 @@ class MyCog(commands.Cog):
             color=Colour.dark_blue(),
         )
         embed.add_field(name="チャンネル", value=ito.get_channel(), inline=False)
-        now = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+        now = datetime.now().strftime("%Y/%m/%d %H:%M")
         embed.set_footer(text=now)
         await ctx.send(embed=embed)
 
@@ -579,7 +579,7 @@ class MyCog(commands.Cog):
     @only_for_player
     async def set_life(self, ctx: commands.Context, *, life: int):
         ito = self.ito
-        now = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+        now = datetime.now().strftime("%Y/%m/%d %H:%M")
         if life < 1 or 3 < life:
             embed = Embed(
                 title="Set life command",
@@ -607,7 +607,7 @@ class MyCog(commands.Cog):
     @only_for_player
     async def set_level(self, ctx: commands.Context, *, level: int):
         ito = self.ito
-        now = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+        now = datetime.now().strftime("%Y/%m/%d %H:%M")
         if level < 1 or 3 < level:
             embed = Embed(
                 title="Set level command",
