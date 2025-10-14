@@ -155,13 +155,15 @@ class Player:
         # 手札を追加
         self.__hand[card] = True
 
-    def put_card(self) -> int | None:
+    def put_card(self) -> int:
         """
         手札の中で最小のカードを捨てる
         手札の中にTrueのカードがなければ例外
 
         手札の中にあるかどうか判定していないため、
         手札が2枚以上にするときは変更が必要
+
+        無い場合はNoneを返す
 
         Returns
         -------

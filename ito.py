@@ -155,9 +155,10 @@ class Ito:
     # getter
     # ----------
 
-    def get_guild(self) -> Guild | None:
+    def get_guild(self) -> Guild:
         """
         サーバーを取得する
+        サーバーが無い場合はNone
 
         Returns
         -------
@@ -185,9 +186,10 @@ class Ito:
         """
         return self.__guild.name
 
-    def get_channel(self) -> TextChannel | None:
+    def get_channel(self) -> TextChannel:
         """
         チャンネルを取得する
+        無い場合はNone
 
         Returns
         -------
@@ -215,9 +217,10 @@ class Ito:
         """
         return self.__channel.name
 
-    def get_voice_channel(self) -> VoiceChannel | None:
+    def get_voice_channel(self) -> VoiceChannel:
         """
         ボイスチャンネルを取得する
+        無い場合はNone
 
         Returns
         -------
